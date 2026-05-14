@@ -1,0 +1,45 @@
+version: "3.9"
+
+# =============================================================================
+# Kesmiris Webshop — Lokale Dev-Umgebung
+# =============================================================================
+# Startet Postgres 16 + Redis 7 lokal. Medusa-Backend selbst läuft via `npm run dev`
+# auf dem Host (für Hot-Reload). Dieses Compose-File ist NICHT für Coolify.
+# Ports bewusst weit (5433 / 6380), damit es nicht mit anderen Services kollidiert.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: kesmiris-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: medusa
+      POSTGRES_PASSWORD: medusa
+      POSTGRES_DB: kesmiris
+    ports:
+      - "5433:5432"
+    volumes:
+      - kesmiris_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medusa -d kesmiris"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: kesmiris-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - kesmiris_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  kesmiris_pg_data:
+  kesmiris_redis_data:

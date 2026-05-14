@@ -1,0 +1,22 @@
+node_modules/
+dist/
+.medusa/
+.cache/
+*.log
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Uploads
+static/
+uploads/

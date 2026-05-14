@@ -1,0 +1,11 @@
+node_modules
+.medusa
+dist
+.git
+.env
+.env.*
+!.env.template
+*.log
+.vscode
+.idea
+.DS_Store
