@@ -15,7 +15,10 @@ WORKDIR /app
 RUN apk add --no-cache libc6-compat
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-ENV NODE_ENV=production
+# NOTE: NODE_ENV stays "development" during build because Medusa CLI only
+# registers its TypeScript loader when NODE_ENV != "production". Without it,
+# medusa-config.ts cannot be resolved by the build command.
+ENV NODE_ENV=development
 RUN npx medusa build
 
 # ---- Stage 3: runtime ----
